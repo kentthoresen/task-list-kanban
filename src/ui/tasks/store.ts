@@ -45,7 +45,31 @@ export function createTasksStore(
 
 	function shouldHandle(file: TFile): boolean {
 		const filenameFilter = getFilenameFilter()?.replace(/^\//, "");
-		return !filenameFilter || file.path.startsWith(filenameFilter);
+		if (filenameFilter && !file.path.startsWith(filenameFilter)) {
+			return false;
+		}
+
+		// Check if file's folder is in excluded folders list
+		// Only apply exclusion when scope is "Everywhere" (filenameFilter is null)
+		if (!filenameFilter) {
+			const settings = get(settingsStore);
+			const excludedFolders = settings.excludedFolders ?? [];
+
+			if (excludedFolders.length > 0) {
+				const fileParentPath = file.parent?.path ?? "";
+				// Check if file's parent path is in excluded folders
+				// Use startsWith to handle nested folder structures
+				const isExcluded = excludedFolders.some(excludedPath =>
+					fileParentPath === excludedPath ||
+					fileParentPath.startsWith(excludedPath + "/")
+				);
+				if (isExcluded) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	function initialise() {

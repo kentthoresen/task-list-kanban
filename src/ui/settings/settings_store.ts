@@ -28,6 +28,7 @@ const settingsObject = z.object({
 		.optional(),
 	doneStatusMarkers: z.string().default(DEFAULT_DONE_STATUS_MARKERS).optional(),
 	ignoredStatusMarkers: z.string().default(DEFAULT_IGNORED_STATUS_MARKERS).optional(),
+	excludedFolders: z.array(z.string()).default([]).optional(),
 });
 
 export type SettingValues = z.infer<typeof settingsObject>;
@@ -41,6 +42,7 @@ export const defaultSettings: SettingValues = {
 	doneVisibility: VisibilityOption.AlwaysShow,
 	doneStatusMarkers: DEFAULT_DONE_STATUS_MARKERS,
 	ignoredStatusMarkers: DEFAULT_IGNORED_STATUS_MARKERS,
+	excludedFolders: [],
 };
 
 export const createSettingsStore = () =>

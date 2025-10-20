@@ -53,6 +53,19 @@ Access settings via the settings icon in the top right corner of your kanban.
 
 Change this setting in the kanban's settings menu.
 
+### Excluded Folders
+
+When using **Every folder** scope, you can exclude specific folders from task scanning. This is useful for ignoring archive folders, templates, or other directories that shouldn't contribute tasks to your kanban.
+
+**Adding excluded folders**: In the settings, enter the folder path and click "Add Folder". Excluded folders apply to nested subfolders as well.
+
+**Examples**:
+- Exclude `Archive/` to ignore all tasks in archive folders
+- Exclude `Templates/` to skip template files
+- Exclude `Private/` to hide personal notes
+
+**Note**: Folder exclusions only apply when scope is set to "Every folder". When using "This folder" scope, only tasks from the current folder are shown regardless of exclusions.
+
 ## Advanced Features
 
 ### Task Status Customization
