@@ -263,7 +263,7 @@ export class SettingsModal extends Modal {
 		excludedFoldersContainer.style.marginTop = "10px";
 		this.contentEl.appendChild(excludedFoldersContainer);
 
-		function updateExcludedFoldersList() {
+		const updateExcludedFoldersList = () => {
 			if (!excludedFoldersContainer) return;
 
 			excludedFoldersContainer.innerHTML = "";
@@ -299,14 +299,14 @@ export class SettingsModal extends Modal {
 				removeBtn.style.color = "var(--text-error)";
 				removeBtn.style.fontWeight = "bold";
 				removeBtn.addEventListener('click', () => {
-					this.settings.excludedFolders = excludedFolders.filter((_, i) => i !== index);
+					this.settings.excludedFolders = excludedFolders.filter((_: string, i: number) => i !== index);
 					updateExcludedFoldersList();
 				});
 				folderItem.appendChild(removeBtn);
 
 				excludedFoldersContainer.appendChild(folderItem);
 			});
-		}
+		};
 
 		// Initial update of the excluded folders list
 		updateExcludedFoldersList();
