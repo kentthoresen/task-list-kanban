@@ -22,8 +22,21 @@ jobs:
 
       - name: Build plugin
         run: |
-          npm install
+          npm ci
           npm run build
+
+      - name: Verify build output
+        run: |
+          echo "Checking build output..."
+          ls -la main.js manifest.json styles.css
+          echo "Build verification complete"
+          echo "File sizes:"
+          du -h main.js manifest.json styles.css
+
+      - name: Setup GitHub CLI
+        run: |
+          echo "Setting up GitHub CLI..."
+          gh --version
 
       - name: Create release
         env:
@@ -31,7 +44,41 @@ jobs:
         run: |
           tag="${GITHUB_REF#refs/tags/}"
 
+          echo "Creating release for tag: $tag"
+
+          # Check if release already exists
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release $tag already exists, deleting..."
+            gh release delete "$tag" --yes
+          fi
+
+          # Create the release
+          echo "Creating release..."
           gh release create "$tag" \
             --title="$tag" \
             --draft \
-            main.js manifest.json styles.css
+            --notes="Release $tag
+
+          ## What's New
+          - Folder exclusion feature: Exclude specific folders when using 'Every folder' scope
+          - Improved settings UI with folder management
+          - Enhanced validation and error handling
+
+          ## Built files:
+          - main.js (plugin bundle)
+          - manifest.json (plugin metadata)
+          - styles.css (plugin styles)"
+
+          # Upload files to the release
+          echo "Uploading files to release..."
+          gh release upload "$tag" \
+            main.js \
+            manifest.json \
+            styles.css
+
+          # Edit release to make it public (not draft)
+          echo "Publishing release..."
+          gh release edit "$tag" \
+            --draft=false
+
+          echo "✅ Release $tag created successfully!"
