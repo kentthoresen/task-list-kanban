@@ -87,6 +87,8 @@ export class SettingsModal extends Modal {
 					this.settings.scope = validatedValue.success
 						? validatedValue.data
 						: defaultSettings.scope;
+					// Update visibility of excluded folders setting when scope changes
+					setTimeout(() => updateVisibility(), 0);
 				});
 			});
 
@@ -324,6 +326,10 @@ export class SettingsModal extends Modal {
 
 		// Initial visibility check
 		updateVisibility();
+
+		// Update visibility when scope changes - listen to the scope dropdown
+		// We'll manually trigger visibility updates when the scope dropdown changes
+		// This is handled in the scope dropdown's onChange callback above
 
 		new Setting(this.contentEl).addButton((btn) =>
 			btn.setButtonText("Save").onClick(() => {
