@@ -51,22 +51,18 @@ function validateFolderPath(folderPath: string): string | null {
 }
 
 export class SettingsModal extends Modal {
-	private contentEl: HTMLElement;
-
 	constructor(
 		app: App,
 		private settings: SettingValues,
 		private readonly onSubmit: (newSettings: SettingValues) => void
 	) {
 		super(app);
-		this.contentEl = this.contentEl;
 	}
 
 	onOpen() {
-		const { contentEl } = this;
-		contentEl.createEl("h1", { text: "Settings" });
+		this.contentEl.createEl("h1", { text: "Settings" });
 
-		new Setting(contentEl)
+		new Setting(this.contentEl)
 			.setName("Columns")
 			.setDesc('The column names separated by a comma ","')
 			.setClass("column")
@@ -79,7 +75,7 @@ export class SettingsModal extends Modal {
 				});
 			});
 
-		new Setting(contentEl)
+		new Setting(this.contentEl)
 			.setName("Folder scope")
 			.setDesc("Where should we try to find tasks for this Kanban?")
 			.addDropdown((dropdown) => {
@@ -94,7 +90,7 @@ export class SettingsModal extends Modal {
 				});
 			});
 
-		new Setting(contentEl)
+		new Setting(this.contentEl)
 			.setName("Show filepath")
 			.setDesc("Show the filepath on each task in Kanban?")
 			.addToggle((toggle) => {
@@ -104,7 +100,7 @@ export class SettingsModal extends Modal {
 				});
 			});
 
-		new Setting(contentEl)
+		new Setting(this.contentEl)
 			.setName("Uncategorized column visibility")
 			.setDesc("When to show the Uncategorized column")
 			.addDropdown((dropdown) => {
@@ -126,7 +122,7 @@ export class SettingsModal extends Modal {
 					});
 			});
 
-		new Setting(contentEl)
+		new Setting(this.contentEl)
 			.setName("Done column visibility")
 			.setDesc("When to show the Done column")
 			.addDropdown((dropdown) => {
@@ -146,7 +142,7 @@ export class SettingsModal extends Modal {
 					});
 			});
 
-		new Setting(contentEl)
+		new Setting(this.contentEl)
 			.setName("Consolidate tags")
 			.setDesc(
 				"Consolidate the tags on each task in Kanban into the footer?"
@@ -158,7 +154,7 @@ export class SettingsModal extends Modal {
 				});
 			});
 
-		new Setting(contentEl)
+		new Setting(this.contentEl)
 			.setName("Done status markers")
 			.setDesc(
 				"Characters that mark a task as done (e.g., 'xX' for [x] and [X]). Each character should be a single Unicode character without spaces."
@@ -179,7 +175,7 @@ export class SettingsModal extends Modal {
 				});
 			});
 
-		new Setting(contentEl)
+		new Setting(this.contentEl)
 			.setName("Ignored status markers")
 			.setDesc(
 				"Characters that mark tasks to be completely ignored by the kanban (e.g., '-' for [-] cancelled tasks). Leave empty to process all task-like strings. Each character should be a single Unicode character without spaces."
@@ -205,7 +201,7 @@ export class SettingsModal extends Modal {
 		let excludedFoldersSetting: Setting | null = null;
 
 		// Create the setting but initially hide it
-		excludedFoldersSetting = new Setting(contentEl)
+		excludedFoldersSetting = new Setting(this.contentEl)
 			.setName("Excluded folders")
 			.setDesc("Folders to exclude when showing tasks from every folder. Only applies when folder scope is set to 'Every folder'.")
 			.addText((text) => {
@@ -265,7 +261,7 @@ export class SettingsModal extends Modal {
 		excludedFoldersContainer = document.createElement("div");
 		excludedFoldersContainer.className = "excluded-folders-list";
 		excludedFoldersContainer.style.marginTop = "10px";
-		contentEl.appendChild(excludedFoldersContainer);
+		this.contentEl.appendChild(excludedFoldersContainer);
 
 		function updateExcludedFoldersList() {
 			if (!excludedFoldersContainer) return;
@@ -329,7 +325,7 @@ export class SettingsModal extends Modal {
 		// Initial visibility check
 		updateVisibility();
 
-		new Setting(contentEl).addButton((btn) =>
+		new Setting(this.contentEl).addButton((btn) =>
 			btn.setButtonText("Save").onClick(() => {
 				this.close();
 				this.onSubmit(this.settings);
@@ -338,6 +334,6 @@ export class SettingsModal extends Modal {
 	}
 
 	onClose() {
-		this.contentEl.empty();
+		// Clean up any event listeners or resources if needed
 	}
 }
